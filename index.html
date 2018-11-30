@@ -1,61 +1,178 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
-  <title>Scrolling Sections</title>
-  <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="style.css"/>
+    <meta charset="UTF-8">
+    <title>P1 - Coffee Sales</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<div class="container">
-  <div id='graphic'>
-    <div id='sections'>
-      <section class="step">
-        <div class="title">Is college worth the cost?</div>
-        We set out to find what makes a college education valuable (experience is invaluable, so we just followed the money and went from there). <br/><br/> What lands you in a good spot after college - private vs public, location, something else? Where does your money go? And the kids that dropout - are they justified? Scroll down to find out.
-      </section>
-      <section class="step">
-        <div class="title">Private Vs Public</div>
-        This bit will be explaining what we discovered about private and public colleges and the price/earnings difference across them.
-      </section>
-      <section class="step">
-        <div class="title">Location</div>
-        Does the location of a college affect how much it costs? How much its graduates make?
-      </section>
-      <section class="step">
-        <div class="title">idk what exactly this graph is gonna show</div>
-        filler filler filler
-      </section>
-      <section class="step">
-        <div class="title">Admission rate vs completion rate</div>
-        filler filler filler
-      </section>
-      <section class="step">
-        <div class="title">How indicative was the median family income on the price of the school</div>
-        filler filler filler
-      </section>
-      <section class="step">
-        <div class="title">More analysis</div>
-        yada yada yada
-      </section>
-      <section class="step">
-        <div class="title">and more</div>
-        More fillers 
-      </section>
-      <section class="step">
-        <div class="title">ending bit</div>
-        conclusion
-      </section>
-    </div>
-    <div id='vis'>
-    </div>
-    <div id="extra-space">
-    </div>
-  </div>
-</div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+    var margin = {top: 60, right: 100, bottom: 40, left: 80},
+        width = 470 - margin.left - margin.right,
+        height = 680 - margin.top - margin.bottom;
 
 
-<script src="d3.js"></script>
-<script src="scroller.js"></script>
-<script src="sections.js"></script>
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var svg = d3.select("body")
+        .append("svg")
+        .style("width", width + margin.left + margin.right + "px")
+        .style("height", height + margin.top + margin.bottom + "px")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "svg");
+
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Average Cost"] = +d["Average Cost"];
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+        d["Median Debt on Grad"] = +d["Median Debt on Graduation"];
+        d["Average Family Income"] = +d["Average Family Income"];
+      });
+
+      var privateVspublicCost = d3.nest()
+      .key(function(d) { return d.Control; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Cost"]; }); }) // tuition?
+      .entries(colleges);
+      
+      console.log(privateVspublicCost);
+
+        x.domain(privateVspublicCost.map(function(d) { return d.key; }));
+        y.domain([0, d3.max(privateVspublicCost, function(d) { return d.value; })]);
+
+        var xaxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Coffee Sales by Region (USD)")
+            .attr("class", "x axis label");
+
+        var yaxis = svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(0, 0));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Coffee Sales (USD)")
+            .attr("class", "y axis label");
+          
+        svg.selectAll(".rect")
+            .data(privateVspublicCost)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });
+    })
+
+    var svg2 = d3.select("body")
+        .append("svg")
+        .style("width", width + margin.left + margin.right + "px")
+        .style("height", height + margin.top + margin.bottom + "px")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "svg");
+
+    d3.csv("coffee_data.csv", function(error, data){
+        data = data.map(function(d){ 
+            d["sales"] = +d["sales"]; 
+            return d;
+        });
+
+        var products = d3.nest()
+            .key(function(d) { return d.category; })
+            .rollup(function(v) { return d3.sum(v, function(d) { return d.sales; }); })
+            .entries(data);
+        console.log(products);
+
+        x.domain(products.map(function(d) { return d.key; }));
+        y.domain([0, d3.max(products, function(d) { return d.value; })]);
+
+        var xaxis = svg2.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg2.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Product")
+            .attr("class", "x axis label");
+
+        svg2.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Coffee Sales by Product (USD)")
+            .attr("class", "x axis label");
+
+        var yaxis = svg2.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(0, 0));
+
+        svg2.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Coffee Sales (USD)")
+            .attr("class", "y axis label");
+          
+        svg2.selectAll(".rect")
+            .data(products)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });
+    })
+    </script>
 </body>
+<script src="./js/main.js"></script>
 </html>

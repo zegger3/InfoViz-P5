@@ -55,7 +55,7 @@ var scrollVis = function () {
   // so the range goes from 0 to 30
   // @v4 using new scale name
   var xHistScale = d3.scaleLinear()
-    .domain([0, 30])
+    .domain([0, 4])
     .range([0, width - 20]);
 
   // @v4 using new scale name
@@ -179,21 +179,16 @@ var scrollVis = function () {
     g.selectAll('.openvis-title')
       .attr('opacity', 0);
 
-    // count filler word count title
-    g.append('text')
-      .attr('class', 'title count-title highlight')
-      .attr('x', width / 2)
-      .attr('y', height / 3)
-      .text('180');
-
-    g.append('text')
-      .attr('class', 'sub-title count-title')
-      .attr('x', width / 2)
-      .attr('y', (height / 3) + (height / 5))
-      .text('Filler Words');
-
-    g.selectAll('.count-title')
+    var testGraph = g.selectAll('.test').data(histData);
+    var testE = testGraph.enter().append('rect')
+      .attr('class', 'testGraph');
+    testGraph = testGraph.merge(testE).attr('x', function (d) { return xHistScale(d.x0); })
+      .attr('y', height)
+      .attr('height', 0)
+      .attr('width', width)
+      .attr('fill', barColors[0])
       .attr('opacity', 0);
+
 
     // square grid
     // @v4 Using .merge here to ensure
@@ -292,7 +287,7 @@ var scrollVis = function () {
     // activateFunctions are called each
     // time the active section changes
     activateFunctions[0] = showTitle;
-    activateFunctions[1] = showFillerTitle;
+    activateFunctions[1] = privateVsPublic;
     activateFunctions[2] = showGrid;
     activateFunctions[3] = highlightGrid;
     activateFunctions[4] = showBar;
@@ -337,29 +332,37 @@ var scrollVis = function () {
    *
    */
   function showTitle() {
+    hideAxis();
     g.selectAll('.count-title')
       .transition()
-      .duration(0)
+      .duration(800)
       .attr('opacity', 0);
 
     g.selectAll('.openvis-title')
       .transition()
       .duration(600)
       .attr('opacity', 1.0);
+
+    g.selectAll('.testGraph')
+      .transition()
+      .duration(600)
+      .attr('height', function () { return 0; })
+      .attr('y', function () { return height; })
+      .style('opacity', 0);
   } 
 
   /**
-   * showFillerTitle - filler counts
+   * privateVsPublic - filler counts
    *
    * hides: intro title
    * hides: square grid
    * shows: filler count title
    *
    */
-  function showFillerTitle() {
+  function privateVsPublic() {
     g.selectAll('.openvis-title')
       .transition()
-      .duration(0)
+      .duration(800)
       .attr('opacity', 0);
 
     g.selectAll('.square')
@@ -387,6 +390,27 @@ var scrollVis = function () {
    
     console.log(JSON.stringify(privateVspublic));
 
+    showAxis(xAxisHist);
+
+    g.selectAll('.bar-text')
+      .transition()
+      .duration(0)
+      .attr('opacity', 0);
+
+    g.selectAll('.bar')
+      .transition()
+      .duration(600)
+      .attr('width', 0);
+
+    // here we only show a bar if
+    // it is before the 15 minute mark
+    g.selectAll('.testGraph')
+      .transition()
+      .duration(600)
+      .attr('y', function (d) { return (d.x0 < 15) ? yHistScale(d.length) : height; })
+      .attr('height', function (d) { return (d.x0 < 15) ? height - yHistScale(d.length) : 0; })
+      .style('opacity', function (d) { return (d.x0 < 15) ? 1.0 : 1e-6; });
+
     });
   }
 
@@ -399,6 +423,7 @@ var scrollVis = function () {
    *
    */
   function showGrid() {
+    hideAxis();
     g.selectAll('.count-title')
       .transition()
       .duration(0)
@@ -412,6 +437,13 @@ var scrollVis = function () {
       })
       .attr('opacity', 1.0)
       .attr('fill', '#ddd');
+
+    g.selectAll('.testGraph')
+      .transition()
+      .duration(600)
+      .attr('height', function () { return 0; })
+      .attr('y', function () { return height; })
+      .style('opacity', 0);
   }
 
   /**
@@ -769,7 +801,7 @@ var scrollVis = function () {
     // https://bl.ocks.org/mbostock/3048450
     // to inform how you use it. Its different!
     return d3.histogram()
-      .thresholds(xHistScale.ticks(10))
+      .thresholds(xHistScale.ticks(4))
       .value(function (d) { return d.min; })(thirtyMins);
   }
 
