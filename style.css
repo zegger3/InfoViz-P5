@@ -43,13 +43,10 @@
   top: 60px;
   z-index: 1;
   margin-left: 0;
-  /* height: 600px; */
-  /* width: 600px; */
-  /* background-color: #ddd; */
 }
 
 #vis .title {
-  font-size:120px;
+  font-size:40px;
   text-anchor: middle;
 }
 

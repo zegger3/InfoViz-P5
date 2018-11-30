@@ -168,13 +168,13 @@ var scrollVis = function () {
       .attr('class', 'title openvis-title')
       .attr('x', width / 2)
       .attr('y', height / 3)
-      .text('2013');
+      .text('The Cost of College');
 
-    g.append('text')
-      .attr('class', 'sub-title openvis-title')
-      .attr('x', width / 2)
-      .attr('y', (height / 3) + (height / 5))
-      .text('OpenVis Conf');
+    // g.append('text')
+    //   .attr('class', 'sub-title openvis-title')
+    //   .attr('x', width / 2)
+    //   .attr('y', (height / 3) + (height / 5))
+    //   .text('');
 
     g.selectAll('.openvis-title')
       .attr('opacity', 0);
@@ -346,7 +346,7 @@ var scrollVis = function () {
       .transition()
       .duration(600)
       .attr('opacity', 1.0);
-  }
+  } 
 
   /**
    * showFillerTitle - filler counts
@@ -367,10 +367,17 @@ var scrollVis = function () {
       .duration(0)
       .attr('opacity', 0);
 
-    g.selectAll('.count-title')
-      .transition()
-      .duration(600)
-      .attr('opacity', 1.0);
+    d3.csv("colleges.csv", function(colleges){
+      colleges.forEach(function(d) {
+        d["Average Cost"] = +d["Average Cost"];
+      });
+      var privateSchoolAvgCost = d3.nest()
+      .key(function(d) { return d.Control; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Cost"]; }); })
+      .entries(colleges);
+    
+    console.log(JSON.stringify(privateSchoolAvgCost));
+    });
   }
 
   /**
