@@ -57,7 +57,7 @@
             .attr("x", width/2)
             .attr("dx", "1em")
             .style("text-anchor", "middle")
-            .text("Region")
+            .text("Control")
             .attr("class", "x axis label");
 
         svg.append("text")
@@ -65,7 +65,7 @@
             .attr("x", width/2)
             .attr("dx", "1em")
             .style("text-anchor", "middle")
-            .text("Coffee Sales by Region (USD)")
+            .text("Private Vs Public Colleges (USD)")
             .attr("class", "x axis label");
 
         var yaxis = svg.append("g")
@@ -82,7 +82,7 @@
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Coffee Sales (USD)")
+            .text("Cost per Semester (USD)")
             .attr("class", "y axis label");
           
         svg.selectAll(".rect")
