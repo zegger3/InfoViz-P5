@@ -316,7 +316,7 @@ var scrollVis = function () {
   /**
    * ACTIVATE FUNCTIONS
    *
-   * These will be called their
+   * These will be called when their
    * section is scrolled to.
    *
    * General pattern is to ensure
@@ -367,16 +367,26 @@ var scrollVis = function () {
       .duration(0)
       .attr('opacity', 0);
 
-    d3.csv("colleges.csv", function(colleges){
+    d3.csv("colleges.csv", function(colleges) {
       colleges.forEach(function(d) {
         d["Average Cost"] = +d["Average Cost"];
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+        d["Median Debt on Grad"] = +d["Median Debt on Graduation"];
+        d["Average Family Income"] = +d["Average Family Income"];
       });
-      var privateSchoolAvgCost = d3.nest()
+
+      var privateVspublic = d3.nest()
       .key(function(d) { return d.Control; })
-      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Cost"]; }); })
+      .rollup(function(v) { return {
+        avgCost: d3.mean(v, function(d) { return d["Average Cost"]; }), // tuition?
+        avgEarn: d3.mean(v, function(d) { return d["Mean Earnings"]; }),
+        avgDebt: d3.mean(v, function(d) { return d["Median Debt on Graduation"]; }),
+        avgFamIncome: d3.mean(v, function(d) { return d["Average Family Income"]; })
+      }; })
       .entries(colleges);
-    
-    console.log(JSON.stringify(privateSchoolAvgCost));
+   
+    console.log(JSON.stringify(privateVspublic));
+
     });
   }
 
@@ -413,6 +423,7 @@ var scrollVis = function () {
    *  are moved back to their place in the grid
    */
   function highlightGrid() {
+
     hideAxis();
     g.selectAll('.bar')
       .transition()
@@ -430,6 +441,35 @@ var scrollVis = function () {
       .duration(0)
       .attr('opacity', 1.0)
       .attr('fill', '#ddd');
+
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Average Cost"] = +d["Average Cost"];
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+      });
+
+      // avg cost & avg earnings by type of location (city, town, etc.)
+      var statsByLocale = d3.nest()
+      .key(function(d) { return d.Locale; })
+      .rollup(function(v) { return {
+        avgCost: d3.mean(v, function(d) { return d["Average Cost"]; }), // tuition?
+        avgEarn: d3.mean(v, function(d) { return d["Mean Earnings"]; })
+      }; })
+      .entries(colleges);
+
+      // avg cost & avg earnings by region
+      var statsByRegion = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return {
+        avgCost: d3.mean(v, function(d) { return d["Average Cost"]; }), // tuition?
+        avgEarn: d3.mean(v, function(d) { return d["Mean Earnings"]; })
+      }; })
+      .entries(colleges);
+   
+    console.log(JSON.stringify(statsByLocale));
+    console.log(JSON.stringify(statsByRegion));
+
+  });
 
     // use named transition to ensure
     // move happens even if other
@@ -497,6 +537,23 @@ var scrollVis = function () {
       .duration(600)
       .delay(1200)
       .attr('opacity', 1);
+
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Admission Rate"] = +d["Admission Rate"];
+        d["Completion Rate"] = +d["Completion Rate 150% time"];
+        d["Retention Rate"] = +d["Retention Rate (First Time Students)"];
+      });
+
+      var avgAdmitRate = d3.mean(colleges, function(d) { return d["Admission Rate"]});
+      var avgComplete = d3.mean(colleges, function(d) {return d["Completion Rate"]});
+      var avgRetention = d3.mean(colleges, function(d) { return d["Retention Rate"]});
+
+      console.log(avgAdmitRate);
+      console.log(avgRetention);
+      console.log(avgComplete);
+
+    });
   }
 
   /**
