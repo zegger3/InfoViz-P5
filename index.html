@@ -6,9 +6,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
 </head>
+<div class="header">
+  <h1><b>College: What is it worth?</b></h1>
+  <p><i>What exactly are you paying for?</i></p>
+</div>
 <body>
-   <div id="main">
-        <div style="position: absolute; bottom: 300px;">
+   <div id="main" class="viz">
+        <div style="position: absolute; bottom: 100px; left: 180px">
             <div>
                 <label for="categorySelect">Y Scale:</label>
             </div>
@@ -16,21 +20,31 @@
               <option selected value="Average Cost">Tuition</option>
               <option value="Median Debt on Graduation">Debt</option>
               <option value="Median Earnings 8 years After Entry">Earnings</option>
+              <option value="Admission Rate">Admission Rate</option>
+              <option value="Expenditure Per Student">Expenditure per Student</option> 
             </select>
         </div>
-        <div style="margin-left: 160px;">
+        <div>
             <svg width="600" height="600" style="border: 1px solid #777;">
             </svg>
         </div>
-        <div style="margin-left: 380px;">
+        <div>
             <label for="categorySelect">X Scale:</label>
             <select class="custom-select small" id="xScaleSelect" onchange="onXScaleChanged()">
               <option value="Average Cost">Tuition (per Semester)</option>
               <option selected value="Median Debt on Graduation">Debt (on Graduation)</option>
               <option value="Median Earnings 8 years After Entry">Earnings (8 yrs after Graduation)</option>
+              <option value="Admission Rate">Admission Rate</option>
+              <option value="Expenditure Per Student">Expenditure per Student</option>             
             </select>
         </div>
-    </div>
+  </div>
+
+<div class="header">
+  <h1><b>Public vs Private:</b></h1>
+  <p><i>What are the big differences?</i></p>
+</div>
+  <div class="viz">
   <div id="option">
     <input name="changeButton" 
            type="button" 
@@ -56,8 +70,14 @@
            onclick="Fam()" />
   </div>
   <div id="test">
-
   </div>
+  </div>
+
+<div class="header">
+  <h1><b>Location:</b></h1>
+  <p><i>What role does it play in a college education?</i></p>
+</div>
+  <div class="viz">
   <div id="option">
     <input name="changeButton" 
            type="button" 
@@ -83,8 +103,9 @@
            onclick="regionFam()" />
   </div>
   <div id="test2">
-
   </div>
+  </div>
+
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
     var margin = {top: 60, right: 100, bottom: 40, left: 80},

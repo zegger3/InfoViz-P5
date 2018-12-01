@@ -45,7 +45,9 @@ d3.csv('./colleges.csv',
             'Name': row['Name'],
             'Average Cost': +row['Average Cost'],
             'Median Debt on Graduation': +row['Median Debt on Graduation'],
-            'Median Earnings 8 years After Entry': +row['Median Earnings 8 years After Entry']        
+            'Median Earnings 8 years After Entry': +row['Median Earnings 8 years After Entry'],
+            'Admission Rate': +row['Admission Rate'],
+            'Expenditure Per Student': +row['Expenditure Per Student']       
         };
     },
     function(error, data) {
