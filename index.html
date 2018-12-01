@@ -2,15 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>P1 - Coffee Sales</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>P5 - Cost of College</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+   <div id="main">
+        <div style="position: absolute; bottom: 300px;">
+            <div>
+                <label for="categorySelect">Y Scale:</label>
+            </div>
+            <select class="custom-select small" id="yScaleSelect" onchange="onYScaleChanged()">
+              <option selected value="Average Cost">Tuition</option>
+              <option value="Median Debt on Graduation">Debt</option>
+              <option value="Median Earnings 8 years After Entry">Earnings</option>
+            </select>
+        </div>
+        <div style="margin-left: 160px;">
+            <svg width="600" height="600" style="border: 1px solid #777;">
+            </svg>
+        </div>
+        <div style="margin-left: 380px;">
+            <label for="categorySelect">X Scale:</label>
+            <select class="custom-select small" id="xScaleSelect" onchange="onXScaleChanged()">
+              <option value="Average Cost">Tuition (per Semester)</option>
+              <option selected value="Median Debt on Graduation">Debt (on Graduation)</option>
+              <option value="Median Earnings 8 years After Entry">Earnings (8 yrs after Graduation)</option>
+            </select>
+        </div>
+    </div>
   <div id="option">
     <input name="changeButton" 
            type="button" 
            value="Average Cost" 
-           onclick="Cost()" />
+           onclick="Cost(); regionCost();" />
   </div>
   <div id="option">
     <input name="changeButton" 
@@ -30,6 +55,36 @@
            value="Average Family Income" 
            onclick="Fam()" />
   </div>
+  <div id="test">
+
+  </div>
+  <div id="option">
+    <input name="changeButton" 
+           type="button" 
+           value="Average Cost by Region" 
+           onclick="regionCost()" />
+  </div>
+  <div id="option">
+    <input name="changeButton" 
+           type="button" 
+           value="Average Debt by Region" 
+           onclick="regionDebt()" />
+  </div>
+  <div id="option">
+    <input name="changeButton" 
+           type="button" 
+           value="Average Earnings by Region" 
+           onclick="regionEarnings()" />
+  </div>
+  <div id="option">
+    <input name="changeButton" 
+           type="button" 
+           value="Average Family Income by Region" 
+           onclick="regionFam()" />
+  </div>
+  <div id="test2">
+
+  </div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
     var margin = {top: 60, right: 100, bottom: 40, left: 80},
@@ -40,7 +95,7 @@
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body")
+    var svg = d3.select("#test")
         .append("svg")
         .style("width", width + margin.left + margin.right + "px")
         .style("height", height + margin.top + margin.bottom + "px")
@@ -122,7 +177,7 @@
     })
 
   function Cost() {
-    var rem = d3.select("svg").remove();
+    var rem = d3.select("#test").selectAll("*").remove();
     var margin = {top: 60, right: 100, bottom: 40, left: 80},
         width = 470 - margin.left - margin.right,
         height = 480 - margin.top - margin.bottom;
@@ -131,7 +186,7 @@
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body")
+    var svg = d3.select("#test")
         .append("svg")
         .style("width", width + margin.left + margin.right + "px")
         .style("height", height + margin.top + margin.bottom + "px")
@@ -216,7 +271,7 @@
   function Earnings() {
 
     // Select the section we want to apply our changes to
-    var rem = d3.select("svg").remove();
+    var rem = d3.select("#test").selectAll("*").remove();
 
     var margin = {top: 60, right: 100, bottom: 40, left: 80},
         width = 470 - margin.left - margin.right,
@@ -226,7 +281,7 @@
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body")
+    var svg = d3.select("#test")
       .append("svg")
       .style("width", width + margin.left + margin.right + "px")
       .style("height", height + margin.top + margin.bottom + "px")
@@ -309,7 +364,7 @@
   function Debt() {
 
     // Select the section we want to apply our changes to
-    var rem = d3.select("svg").remove();
+    var rem = d3.select("#test").selectAll("*").remove();
 
     var margin = {top: 60, right: 100, bottom: 40, left: 80},
         width = 470 - margin.left - margin.right,
@@ -319,7 +374,7 @@
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body")
+    var svg = d3.select("#test")
       .append("svg")
       .style("width", width + margin.left + margin.right + "px")
       .style("height", height + margin.top + margin.bottom + "px")
@@ -402,7 +457,7 @@
   function Fam() {
 
     // Select the section we want to apply our changes to
-    var rem = d3.select("svg").remove();
+    var rem = d3.select("#test").selectAll("*").remove();
 
     var margin = {top: 60, right: 100, bottom: 40, left: 80},
         width = 470 - margin.left - margin.right,
@@ -412,7 +467,7 @@
     var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
     var y = d3.scaleLinear().range([height, 0]);
 
-    var svg = d3.select("body")
+    var svg = d3.select("#test")
       .append("svg")
       .style("width", width + margin.left + margin.right + "px")
       .style("height", height + margin.top + margin.bottom + "px")
@@ -492,6 +547,472 @@
     
     });
   }
+
+  var margin2 = {top: 60, right: 100, bottom: 40, left: 80},
+        width2 = 1000 - margin2.left - margin2.right,
+        height2 = 480 - margin2.top - margin2.bottom;
+
+
+    var x2 = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y2 = d3.scaleLinear().range([height, 0]);
+
+    var svg2 = d3.select("#test2")
+        .append("svg")
+        .style("width", width2 + margin2.left + margin2.right + "px")
+        .style("height", height2 + margin2.top + margin2.bottom + "px")
+        .attr("width", width2 + margin2.left + margin.right)
+        .attr("height", height2 + margin2.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin2.left + "," + margin2.top + ")")
+        .attr("class", "svg");
+
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Average Cost"] = +d["Average Cost"];
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+        d["Median Debt on Grad"] = +d["Median Debt on Graduation"];
+        d["Average Family Income"] = +d["Average Family Income"];
+      });
+
+      var privateVspublicCost = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Cost"]; }); }) // tuition?
+      .entries(colleges);
+      
+      console.log(privateVspublicCost);
+
+        x2.domain(privateVspublicCost.map(function(d) { return d.key; }));
+        y2.domain([0, d3.max(privateVspublicCost, function(d) { return d.value; })]);
+
+        var xaxis = svg2.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x2)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg2.append("text")
+            .attr("y", height2 + 30)
+            .attr("x", width2/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg2.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Regional Comparisons")
+            .attr("class", "x axis label");
+
+        var yaxis = svg2.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y2)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(3, 3));
+
+        svg2.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height2 / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Cost per Semester (USD)")
+            .attr("class", "y axis label");
+          
+        svg2.selectAll(".rect")
+            .data(privateVspublicCost)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x2(d.key); })
+                .attr("y", function(d) { return y2(d.value); })
+                .attr("fill", '#008080')
+                .attr("width", x2.bandwidth())
+                .attr("height", function(d) { return height - y2(d.value); });
+    })
+
+  function regionCost() {
+    var rem = d3.select("#test2").selectAll("*").remove();
+    var margin = {top: 60, right: 100, bottom: 40, left: 80},
+        width = 1000 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
+
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var svg = d3.select("#test2")
+        .append("svg")
+        .style("width", width + margin.left + margin.right + "px")
+        .style("height", height + margin.top + margin.bottom + "px")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "svg");
+
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Average Cost"] = +d["Average Cost"];
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+        d["Median Debt on Grad"] = +d["Median Debt on Graduation"];
+        d["Average Family Income"] = +d["Average Family Income"];
+      });
+
+      var privateVspublicCost = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Cost"]; }); }) // tuition?
+      .entries(colleges);
+      
+      console.log(privateVspublicCost);
+
+        x.domain(privateVspublicCost.map(function(d) { return d.key; }));
+        y.domain([0, d3.max(privateVspublicCost, function(d) { return d.value; })]);
+
+        var xaxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Regional Comparisons")
+            .attr("class", "x axis label");
+
+        var yaxis = svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(3, 3));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Cost per Semester (USD)")
+            .attr("class", "y axis label");
+          
+        svg.selectAll(".rect")
+            .data(privateVspublicCost)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("fill", '#008080')
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });
+    })
+  }
+
+  function regionEarnings() {
+
+    // Select the section we want to apply our changes to
+    var rem = d3.select("#test2").selectAll("*").remove();
+
+    var margin = {top: 60, right: 100, bottom: 40, left: 80},
+        width = 1000 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
+
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var svg = d3.select("#test2")
+      .append("svg")
+      .style("width", width + margin.left + margin.right + "px")
+      .style("height", height + margin.top + margin.bottom + "px")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+      .attr("class", "svg");
+
+    // Get the data again
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Mean Earnings"] = +d["Mean Earnings 8 years After Entry"];
+      });
+
+      var privateVspublicEarn = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Mean Earnings"]; }); }) // tuition?
+      .entries(colleges);
+      console.log(privateVspublicEarn);
+
+      // Scale the range of the data again 
+      x.domain(privateVspublicEarn.map(function(d) { return d.key; }));
+      y.domain([0, d3.max(privateVspublicEarn, function(d) { return d.value; })]);
+
+      var xaxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Regional Comparisons")
+            .attr("class", "x axis label");
+
+        var yaxis = svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(3, 3));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Mean Earnings 8 years After Entry (USD)")
+            .attr("class", "y axis label");
+          
+        svg.selectAll(".rect")
+            .data(privateVspublicEarn)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("fill", '#008080')
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });      
+
+    });
+  }
+  function regionDebt() {
+
+    // Select the section we want to apply our changes to
+    var rem = d3.select("#test2").selectAll("*").remove();
+
+    var margin = {top: 60, right: 100, bottom: 40, left: 80},
+        width = 1000 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
+
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var svg = d3.select("#test2")
+      .append("svg")
+      .style("width", width + margin.left + margin.right + "px")
+      .style("height", height + margin.top + margin.bottom + "px")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+      .attr("class", "svg");
+
+    // Get the data again
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Median Debt on Grad"] = +d["Median Debt on Graduation"];
+      });
+
+      var privateVspublicDebt = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Median Debt on Grad"]; }); }) // tuition?
+      .entries(colleges);
+      console.log(privateVspublicDebt);
+
+      // Scale the range of the data again 
+      x.domain(privateVspublicDebt.map(function(d) { return d.key; }));
+      y.domain([0, d3.max(privateVspublicDebt, function(d) { return d.value; })]);
+
+      var xaxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Regional Comparisons")
+            .attr("class", "x axis label");
+
+        var yaxis = svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(3, 3));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Debt upon Graduation (USD)")
+            .attr("class", "y axis label");
+          
+        svg.selectAll(".rect")
+            .data(privateVspublicDebt)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("fill", '#008080')
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });      
+    
+    });
+  }
+  function regionFam() {
+
+    // Select the section we want to apply our changes to
+    var rem = d3.select("#test2").selectAll("*").remove();
+
+    var margin = {top: 60, right: 100, bottom: 40, left: 80},
+        width = 1000 - margin.left - margin.right,
+        height = 480 - margin.top - margin.bottom;
+
+
+    var x = d3.scaleBand().rangeRound([0, width]).padding(0.1)
+    var y = d3.scaleLinear().range([height, 0]);
+
+    var svg = d3.select("#test2")
+      .append("svg")
+      .style("width", width + margin.left + margin.right + "px")
+      .style("height", height + margin.top + margin.bottom + "px")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+      .attr("class", "svg");
+
+    // Get the data again
+    d3.csv("colleges.csv", function(colleges) {
+      colleges.forEach(function(d) {
+        d["Average Family Income"] = +d["Average Family Income"];
+      });
+
+      var privateVspublicFam = d3.nest()
+      .key(function(d) { return d.Region; })
+      .rollup(function(v) { return d3.mean(v, function(d) { return d["Average Family Income"]; }); }) // tuition?
+      .entries(colleges);
+      console.log(privateVspublicFam);
+
+      // Scale the range of the data again 
+      x.domain(privateVspublicFam.map(function(d) { return d.key; }));
+      y.domain([0, d3.max(privateVspublicFam, function(d) { return d.value; })]);
+
+      var xaxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x axis")
+            .call(d3.axisBottom(x)
+                .tickSize(0, 0)
+                .tickSizeInner(0)
+                .tickPadding(3));
+
+        svg.append("text")
+            .attr("y", height + 30)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Region")
+            .attr("class", "x axis label");
+
+        svg.append("text")
+            .attr("y", 0 - 10)
+            .attr("x", width/2)
+            .attr("dx", "1em")
+            .style("text-anchor", "middle")
+            .text("Regional Comparisons")
+            .attr("class", "x axis label");
+
+        var yaxis = svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(y)
+                .ticks(6)
+                .tickSizeInner(0)
+                .tickPadding(6)
+                .tickSize(3, 3));
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - 70)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Average Family Income (USD)")
+            .attr("class", "y axis label");
+          
+        svg.selectAll(".rect")
+            .data(privateVspublicFam)
+            .enter()
+            .append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.key); })
+                .attr("y", function(d) { return y(d.value); })
+                .attr("fill", '#008080')
+                .attr("width", x.bandwidth())
+                .attr("height", function(d) { return height - y(d.value); });      
+    
+    });
+  }
     </script>
 </body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="./main.js"></script>
 </html>

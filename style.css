@@ -1,6 +1,39 @@
-#main {
-    padding: 20px;
-    .rect {
-    fill: #EF5285;
-  }
+.dot circle {
+    fill: #2AD446;
+    opacity: 0.6;
+
 }
+
+.dot text {
+    text-anchor: middle;
+    font-size: 14px;
+    pointer-events: none;
+    fill: black;
+    font-weight: bold;
+    background-color: #f18973;
+}
+
+.dot text {
+    opacity: 0;
+}
+
+.dot:hover text {
+    opacity: 1;
+    overflow: visible;
+    height: auto;
+    z-index: 100;
+}
+
+body {
+    font-family: "Open Sans";
+    margin: 0;
+}
+
+label {
+    font-size: 13px;
+}
+
+#main {
+    margin: 20px;
+}
+
